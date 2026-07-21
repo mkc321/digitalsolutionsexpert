@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Redirecting...</title>
+</head>
+<body>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+let encoded = params.get("url");
+
+if (!encoded) {
+    document.body.textContent = "No URL provided.";
+} else {
+    try {
+        // Convert URL-safe Base64 to standard Base64
+        encoded = encoded.replace(/-/g, '+').replace(/_/g, '/');
+
+        // Restore missing padding
+        while (encoded.length % 4) {
+            encoded += '=';
+        }
+
+        const decoded = atob(encoded);
+        window.location.replace(decoded);
+    } catch (e) {
+        document.body.textContent = "Invalid Base64 string.";
+        console.error(e);
+    }
+}
+</script>
+
+</body>
+</html>
